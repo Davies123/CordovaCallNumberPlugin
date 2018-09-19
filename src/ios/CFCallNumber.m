@@ -26,16 +26,14 @@
             number =  [NSString stringWithFormat:@"tel:%@", number];
         }
 
-        if(![CFCallNumber available]) {
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"NoFeatureCallSupported"];
-        }
-        else if(![[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]]) {
-            // missing phone number
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"CouldNotCallPhoneNumber"];
+        BOOL callAction = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:number]];
+        
+        if(callAction){
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"CallSuccess"];
         } else {
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"CouldNotCallPhoneNumber"];
         }
-
+    
         // return result
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 
