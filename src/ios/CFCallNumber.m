@@ -1,10 +1,17 @@
 #import <Cordova/CDVPlugin.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 #import "CFCallNumber.h"
 
 @implementation CFCallNumber
 
 + (BOOL)available {
-    return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]];
+    BOOL canOpen = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]];
+    CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [netInfo subscriberCellularProvider];
+    NSString *mnc = [carrier mobileNetworkCode];
+    BOOL unavailableRightNow = ([mnc length] == 0) || ([mnc isEqualToString:@"65535"]);
+    return canOpen && !unavailableRightNow;
 }
 
 - (void) callNumber:(CDVInvokedUrlCommand*)command {
