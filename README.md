@@ -1,3 +1,6 @@
+*** This is a fork of the original CordovaCallNumberPlugin by https://github.com/rohfosho ***
+*** I updated the available() function in iOS to do some more checking and simplified the logic within callNumber() function. *** 
+
 CordovaCallNumberPlugin
 =======================
 
